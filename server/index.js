@@ -26,3 +26,16 @@ app.use("/client", clientRoutes);
 app.use("/general", generalRoutes);
 app.use("/management", managementRoutes);
 app.use("/sales", salesRoutes);
+
+// Mongoose setup
+const PORT = process.env.PORT || 8000;
+mongoose
+  .connect(process.env.MONGODB_URL, {})
+  .then(() => {
+    app.listen(PORT, () => {
+      console.log(`Server PORT: ${PORT} connected successfully`);
+    });
+  })
+  .catch((error) => {
+    console.log(`${error} did not connect.`);
+  });
