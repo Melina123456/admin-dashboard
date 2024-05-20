@@ -1,7 +1,6 @@
 import Product from "../models/product.model.js";
 import ProductStat from "../models/productStat.model.js";
 import User from "../models/User.model.js";
-import Transactions from "../models/transaction.model.js";
 import Transaction from "../models/transaction.model.js";
 
 export const getProducts = async (req, res) => {
@@ -63,7 +62,7 @@ export const getTransactions = async (req, res) => {
       name: { $regex: search, $options: "i" },
     });
 
-    res.status(200).json(transactions, total);
+    res.status(200).json({ transactions, total });
   } catch (error) {
     return res.status(404).json({ message: error.message });
   }
