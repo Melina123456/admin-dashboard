@@ -9,7 +9,7 @@ export const getProducts = async (req, res) => {
 
     const productWithStats = await Promise.all(
       products.map(async (product) => {
-        const stat = await ProductStat.find({
+        const stat = await ProductStat.find({ 
           productId: product._id,
         });
         return {
@@ -42,7 +42,8 @@ export const getTransactions = async (req, res) => {
     const generateSort = () => {
       const sortParsed = JSON.parse(sort);
       const sortFormatted = {
-        [sortParsed.field]: (sortParsed.sort = "asc" ? 1 : -1),
+      [sortParsed.field]: (sortParsed.sort == "asc" ? 1 : -1),
+
       };
       return sortFormatted;
     };
@@ -59,11 +60,14 @@ export const getTransactions = async (req, res) => {
       .limit(pageSize);
 
     const total = await Transaction.countDocuments({
-      name: { $regex: search, $options: "i" },
-    });
+      userId: { $regex: search, $options: "i" } });
 
-    res.status(200).json({ transactions, total });
+    res.status(200).json({
+       transactions,
+       total,
+       });
   } catch (error) {
     return res.status(404).json({ message: error.message });
   }
 };
+                                

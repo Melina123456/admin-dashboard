@@ -7,23 +7,20 @@ import {
   GridToolbarExport,
   GridToolbarColumnsButton,
 } from "@mui/x-data-grid";
-import FlexBetween from "./FlexBetween";
+import FLexBetween from "./FlexBetween";
 
 const DataGridCustomToolbar = ({ searchInput, setSearchInput, setSearch }) => {
   return (
     <GridToolbarContainer>
-      <FlexBetween width="100%">
-        <FlexBetween>
+      <FLexBetween width="100%">
+        <FLexBetween>
           <GridToolbarColumnsButton />
           <GridToolbarDensitySelector />
           <GridToolbarExport />
-        </FlexBetween>
+        </FLexBetween>
         <TextField
           label="Search..."
-          sx={{
-            mb: "0.5rem",
-            width: "15rem",
-          }}
+          sx={{ mb: "0.5rem", width: "15rem" }}
           onChange={(e) => setSearchInput(e.target.value)}
           value={searchInput}
           variant="standard"
@@ -42,7 +39,7 @@ const DataGridCustomToolbar = ({ searchInput, setSearchInput, setSearch }) => {
             ),
           }}
         />
-      </FlexBetween>
+      </FLexBetween>
     </GridToolbarContainer>
   );
 };

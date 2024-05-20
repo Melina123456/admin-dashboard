@@ -32,5 +32,5 @@ export const {
   useGetUserQuery,
   useGetProductsQuery,
   useGetCustomersQuery,
-  useGetTransactionsQuery,
+  useGetTransactionsQuery,                                      
 } = api;
