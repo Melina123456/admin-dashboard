@@ -2,6 +2,7 @@ import Product from "../models/product.model.js";
 import ProductStat from "../models/productStat.model.js";
 import User from "../models/User.model.js";
 import Transaction from "../models/transaction.model.js";
+import getCountryIso3 from "country-iso-2-to-3";
 
 export const getProducts = async (req, res) => {
   try {
@@ -9,7 +10,7 @@ export const getProducts = async (req, res) => {
 
     const productWithStats = await Promise.all(
       products.map(async (product) => {
-        const stat = await ProductStat.find({ 
+        const stat = await ProductStat.find({
           productId: product._id,
         });
         return {
@@ -42,8 +43,7 @@ export const getTransactions = async (req, res) => {
     const generateSort = () => {
       const sortParsed = JSON.parse(sort);
       const sortFormatted = {
-      [sortParsed.field]: (sortParsed.sort == "asc" ? 1 : -1),
-
+        [sortParsed.field]: sortParsed.sort == "asc" ? 1 : -1,
       };
       return sortFormatted;
     };
@@ -60,14 +60,37 @@ export const getTransactions = async (req, res) => {
       .limit(pageSize);
 
     const total = await Transaction.countDocuments({
-      userId: { $regex: search, $options: "i" } });
+      userId: { $regex: search, $options: "i" },
+    });
 
     res.status(200).json({
-       transactions,
-       total,
-       });
+      transactions,
+      total,
+    });
   } catch (error) {
     return res.status(404).json({ message: error.message });
   }
 };
-                                
+
+export const getGeography = async (req, res) => {
+  try {
+    const users = await User.find();
+    const mappedLocations = users.reduce((acc, { country }) => {
+      const countryISO3 = getCountryIso3(country);
+      if (!acc[countryISO3]) {
+        acc[countryISO3] = 0;
+      }
+      acc[countryISO3]++;
+      return acc;
+    }, {});
+
+    const formattedLocations = Object.entries(mappedLocations).map(
+      ([country, count]) => {
+        return { id: country, value: count };
+      }
+    );
+    res.status(200).json(formattedLocations);
+  } catch (error) {
+    return res.status(404).json({ message: error.message });
+  }
+};
